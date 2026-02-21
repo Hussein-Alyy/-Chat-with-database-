@@ -68,7 +68,6 @@ if user_input := st.chat_input("What would you like to know from your data?"):
     with st.chat_message("assistant"):
         db_schema = fetch_database_schema()
         
-        # المرحلة الأولى: SQL Generation (تعديل الـ Prompt لحل مشكلة الأسماء)
         sql_generation_prompt = f"""
         You are an expert PostgreSQL developer. 
         Database Schema:
@@ -89,11 +88,9 @@ if user_input := st.chat_input("What would you like to know from your data?"):
         st.code(clean_sql_query, language="sql")
         
         try:
-            #  تنفيذ الكويري
             query_results = run_query(clean_sql_query)
             st.dataframe(query_results)
             
-            #  تحليل النتايج
             analysis_prompt = f"""
             Context: The user asked "{user_input}"
             Data Results:
@@ -104,7 +101,6 @@ if user_input := st.chat_input("What would you like to know from your data?"):
             final_answer = llm.invoke(analysis_prompt)
             st.markdown(final_answer)
             
-            # حفظ الرد
             st.session_state.chat_history.append({
                 "role": "assistant", 
                 "content": final_answer, 
@@ -114,6 +110,7 @@ if user_input := st.chat_input("What would you like to know from your data?"):
         except Exception as error:
             st.error(f"⚠️ SQL Execution Error: {str(error)}")
             st.info("Tip: Make sure the table names in the schema are correct.")
+
 
 
 
