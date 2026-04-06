@@ -13,7 +13,6 @@ GOOGLE_API_KEY =
 DB_URL = 
 
 # --- DATABASE ENGINE ---
-# استخدام التخزين المؤقت للاتصال لضمان السرعة
 @st.cache_resource
 def get_db_engine():
     return create_engine(DB_URL)
@@ -40,14 +39,12 @@ def fetch_database_schema():
     return schema_details
 
 # --- AI INITIALIZATION ---
-# هنا استخدمت 2.5
 llm = GoogleGenerativeAI(model="gemini-2.5-flash", api_key=GOOGLE_API_KEY)
 
 # --- UI ELEMENTS ---
 st.title("🚀 Smart SQL Analyst Pro")
 st.markdown("---")
 
-# تهيئة ذاكرة المحادثة (Session State)
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
@@ -60,7 +57,6 @@ for msg in st.session_state.chat_history:
 # --- MAIN LOGIC ---
 if user_input := st.chat_input("What would you like to know from your data?"):
     
-    # إضافة سؤال المستخدم
     st.session_state.chat_history.append({"role": "user", "content": user_input})
     with st.chat_message("user"):
         st.markdown(user_input)
